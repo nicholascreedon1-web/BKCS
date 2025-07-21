@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BKCS Croquet Tournament Bracket</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e4d3b 0%, #0f2419 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #f7f5f0 0%, #ede8e0 100%);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border: 2px solid #2d5a41;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1e4d3b;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: #2d5a41;
+            margin-bottom: 15px;
+        }
+
+        .admin-login-btn {
+            background: #2d5a41;
+            color: #f7f5f0;
+            border: 2px solid #1e4d3b;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .admin-login-btn:hover {
+            background: #1e4d3b;
+            border-color: #2d5a41;
+            transform: translateY(-1px);
+        }
+
+        .bracket-container {
+            background: linear-gradient(135deg, #f7f5f0 0%, #ede8e0 100%);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border: 2px solid #2d5a41;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            min-height: 700px;
+        }
+
+        .bracket {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            min-width: 1200px;
+            position: relative;
+        }
+
+        .round {
+            display: flex;
+            flex-direction: column;
+            min-height: 650px;
+            position: relative;
+        }
+
+        /* Round 1 & 2: Equal spacing */
+        .round:nth-child(1), .round:nth-child(2) {
+            justify-content: space-around;
+        }
+
+        /* Round 3: Quarterfinals - center between pairs of Round 2 matches */
+        .round:nth-child(3) {
+            justify-content: flex-start;
+            padding-top: 60px;
+        }
+
+        .round:nth-child(3) .match:nth-child(2) { /* QF1 - between R2-1 & R2-2 */
+            margin-top: 0px;
+        }
+
+        .round:nth-child(3) .match:nth-child(3) { /* QF2 - between R2-3 & R2-4 */
+            margin-top: 70px;
+        }
+
+        .round:nth-child(3) .match:nth-child(4) { /* QF3 - between R2-5 & R2-6 */
+            margin-top: 70px;
+        }
+
+        .round:nth-child(3) .match:nth-child(5) { /* QF4 - between R2-7 & R2-8 */
+            margin-top: 70px;
+        }
+
+        /* Round 4: Semifinals - center between pairs of Round 3 matches */
+        .round:nth-child(4) {
+            justify-content: flex-start;
+            padding-top: 135px;
+        }
+
+        .round:nth-child(4) .match:nth-child(2) { /* SF1 - between QF1 & QF2 */
+            margin-top: 0px;
+        }
+
+        .round:nth-child(4) .match:nth-child(3) { /* SF2 - between QF3 & QF4 */
+            margin-top: 140px;
+        }
+
+        /* Championship: Center between Round 4 matches */
+        .championship {
+            justify-content: flex-start;
+            padding-top: 205px;
+        }
+
+        .round-header {
+            text-align: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: #1e4d3b;
+            margin-bottom: 20px;
+            padding: 8px 15px;
+            background: linear-gradient(135deg, #e8f4ed 0%, #d4e8dc 100%);
+            border-radius: 20px;
+            border: 2px solid #2d5a41;
+        }
+
+        .match {
+            background: linear-gradient(135deg, #faf9f7 0%, #f2f0ec 100%);
+            border: 2px solid #c7d2cc;
+            border-radius: 8px;
+            width: 180px;
+            margin: 8px 0;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .match:hover {
+            border-color: #2d5a41;
+            box-shadow: 0 4px 12px rgba(45, 90, 65, 0.2);
+        }
+
+        .match-number {
+            background: #2d5a41;
+            color: #f7f5f0;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 0 0 4px 0;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .team {
+            padding: 8px 12px;
+            padding-right: 50px; /* Add space for match number */
+            border-bottom: 1px solid #c7d2cc;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 32px;
+            color: #1e4d3b;
+        }
+
+        .team:last-child {
+            border-bottom: none;
+        }
+
+        .team.winner {
+            background: linear-gradient(135deg, #d4e8dc 0%, #c1dcc9 100%);
+            color: #0f2419;
+            font-weight: 600;
+            border-left: 3px solid #2d5a41;
+        }
+
+        .team.bye {
+            background: linear-gradient(135deg, #f4f1ec 0%, #e8e4dd 100%);
+            color: #5d4e37;
+            font-style: italic;
+        }
+
+        .match-info {
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #e8f0eb 0%, #dde8e1 100%);
+            font-size: 10px;
+            color: #2d5a41;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 500;
+        }
+
+        .live-odds-link {
+            color: #2d5a41;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #2d5a41;
+            background: rgba(45, 90, 65, 0.1);
+            transition: all 0.2s;
+            font-size: 9px;
+        }
+
+        .live-odds-link:hover {
+            background: #2d5a41;
+            color: #f7f5f0;
+            transform: scale(1.05);
+        }
+
+        /* Betting Page Styles */
+        .betting-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .betting-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .betting-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e4d3b;
+            margin-bottom: 10px;
+        }
+
+        .betting-subtitle {
+            font-size: 1rem;
+            color: #5d4e37;
+            font-style: italic;
+        }
+
+        .betting-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e8f0eb;
+            padding-bottom: 15px;
+        }
+
+        .betting-nav-btn {
+            background: linear-gradient(135deg, #faf9f7 0%, #f2f0ec 100%);
+            border: 2px solid #c7d2cc;
+            color: #2d5a41;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .betting-nav-btn:hover {
+            border-color: #2d5a41;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 90, 65, 0.2);
+        }
+
+        .betting-nav-btn.active {
+            background: linear-gradient(135deg, #2d5a41 0%, #1e4d3b 100%);
+            color: #f7f5f0;
+            border-color: #1e4d3b;
+        }
+
+        .betting-section {
+            display: none;
+        }
+
+        .betting-section.active {
+            display: block;
+        }
+
+        .betting-section h3 {
+            font-size: 1.5rem;
+            color: #1e4d3b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .odds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .match-card {
+            background: linear-gradient(135deg, #faf9f7 0%, #f2f0ec 100%);
+            border: 2px solid #c7d2cc;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .match-card:hover {
+            border-color: #2d5a41;
+            box-shadow: 0 6px 20px rgba(45, 90, 65, 0.15);
+        }
+
+        .match-header {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e4d3b;
+            margin-bottom: 15px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e8f0eb;
+        }
+
+        .team-odds {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: linear-gradient(135deg, #e8f0eb 0%, #dde8e1 100%);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .team-odds:hover {
+            background: linear-gradient(135deg, #d4e8dc 0%, #c7d2cc 100%);
+            cursor: pointer;
+        }
+
+        .team-name {
+            font-weight: 600;
+            color: #1e4d3b;
+            flex-grow: 1;
+        }
+
+        .odds-value {
+            background: #2d5a41;
+            color: #f7f5f0;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .props-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .prop-card {
+            background: linear-gradient(135deg, #faf9f7 0%, #f2f0ec 100%);
+            border: 2px solid #c7d2cc;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .prop-card:hover {
+            border-color: #2d5a41;
+            box-shadow: 0 6px 20px rgba(45, 90, 65, 0.15);
+        }
+
+        .prop-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e4d3b;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .prop-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #e8f0eb 0%, #dde8e1 100%);
+            border-radius: 6px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .prop-option:hover {
+            background: linear-gradient(135deg, #d4e8dc 0%, #c7d2cc 100%);
+        }
+
+        .prop-option:last-child {
+            margin-bottom: 0;
+        }
+
+        .futures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .futures-card {
+            background: linear-gradient(135deg, #faf9f7 0%, #f2f0ec 100%);
+            border: 2px solid #c7d2cc;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .futures-card:hover {
+            border-color: #2d5a41;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(45, 90, 65, 0.15);
+        }
+
+        .betting-disclaimer {
+            margin-top: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #e8f0eb 0%, #dde8e1 100%);
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #c7d2cc;
+        }
+
+        .betting-disclaimer p {
+            margin: 0;
+            color: #2d5a41;
+            font-weight: 500;
+        }
+
+        /* Connecting Lines */
+        .connector {
+            position: absolute;
+            background: #cbd5e0;
+            z-index: 1;
+        }
+
+        .connector.horizontal {
+            display: none; /* Hide for now - will add proper connections later */
+        }
+
+        .connector.vertical {
+            width: 2px;
+            right: -15px;
+        }
+
+        /* Connecting lines between rounds */
+        .round-connector {
+            position: absolute;
+            right: -30px;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            pointer-events: none;
+        }
+
+        .round-connector svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .round-connector path {
+            stroke: #cbd5e0;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* Championship section */
+        .championship {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 650px;
+        }
+
+        .champion-box {
+            background: linear-gradient(135deg, #f7f5f0 0%, #ede8e0 100%);
+            border: 3px solid #2d5a41;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            width: 200px;
+            box-shadow: 0 8px 25px rgba(45, 90, 65, 0.3);
+        }
+
+        .champion-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e4d3b;
+            margin-bottom: 10px;
+        }
+
+        .champion-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d5a41;
+            min-height: 20px;
+        }
+
+        .admin-panel {
+            display: none;
+            background: linear-gradient(135deg, #f7f5f0 0%, #ede8e0 100%);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border: 2px solid #2d5a41;
+        }
+
+        .admin-panel h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #1e4d3b;
+            font-size: 1.5rem;
+        }
+
+        .admin-match {
+            background: linear-gradient(135deg, #faf9f7 0%, #f2f0ec 100%);
+            border: 1px solid #c7d2cc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .admin-match h3 {
+            margin-bottom: 12px;
+            color: #1e4d3b;
+            font-size: 14px;
+        }
+
+        .admin-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-group label {
+            font-size: 11px;
+            color: #2d5a41;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .control-group input,
+        .control-group select {
+            padding: 6px 8px;
+            border: 1px solid #c7d2cc;
+            border-radius: 4px;
+            font-size: 12px;
+            background: #faf9f7;
+            color: #1e4d3b;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: #2d5a41;
+            box-shadow: 0 0 0 2px rgba(45, 90, 65, 0.2);
+        }
+
+        .save-btn {
+            background: #2d5a41;
+            color: #f7f5f0;
+            border: 1px solid #1e4d3b;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .save-btn:hover {
+            background: #1e4d3b;
+            border-color: #0f2419;
+        }
+
+        .tab-navigation {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background: rgba(247, 245, 240, 0.9);
+            border: 2px solid #2d5a41;
+            color: #2d5a41;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            background: rgba(45, 90, 65, 0.1);
+            border-color: #1e4d3b;
+        }
+
+        .tab-btn.active {
+            background: #2d5a41;
+            color: #f7f5f0;
+            border-color: #1e4d3b;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .champions-container {
+            background: linear-gradient(135deg, #f7f5f0 0%, #ede8e0 100%);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border: 2px solid #2d5a41;
+            margin-bottom: 20px;
+        }
+
+        .champions-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e4d3b;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .champions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .champion-year {
+            background: linear-gradient(135deg, #faf9f7 0%, #f2f0ec 100%);
+            border: 1px solid #c7d2cc;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.2s;
+        }
+
+        .champion-year:hover {
+            border-color: #2d5a41;
+            box-shadow: 0 4px 12px rgba(45, 90, 65, 0.2);
+        }
+
+        .year-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2d5a41;
+            margin-bottom: 8px;
+        }
+
+        .champion-names {
+            font-size: 14px;
+            color: #1e4d3b;
+            font-weight: 500;
+        }
+
+        .no-tournament {
+            font-style: italic;
+            color: #5d4e37;
+        }
+
+        .champions-stats {
+            margin-bottom: 40px;
+        }
+
+        .stats-title, .history-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e4d3b;
+            margin-bottom: 25px;
+        }
+
+        .leaderboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .leader-item {
+            background: linear-gradient(135deg, #faf9f7 0%, #f2f0ec 100%);
+            border: 2px solid #c7d2cc;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .leader-item:hover {
+            border-color: #2d5a41;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 90, 65, 0.2);
+        }
+
+
+
+        .rank-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e4d3b;
+            min-width: 40px;
+            text-align: center;
+            background: #e8f0eb;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #c7d2cc;
+        }
+
+
+
+        .leader-info {
+            flex: 1;
+        }
+
+        .leader-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e4d3b;
+            margin-bottom: 4px;
+        }
+
+        .leader-count {
+            font-size: 14px;
+            color: #2d5a41;
+        }
+
+        .win-count {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d5a41;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .win-bar {
+            width: 100%;
+            height: 6px;
+            background: #c7d2cc;
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .win-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2d5a41, #4a7c59);
+            border-radius: 3px;
+            transition: width 0.8s ease;
+        }
+
+
+
+        .asterisk {
+            color: #e53e3e;
+            font-weight: bold;
+            margin-left: 4px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tooltip {
+            position: fixed;
+            background: linear-gradient(135deg, #1e4d3b 0%, #0f2419 100%);
+            color: #f7f5f0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #2d5a41;
+            font-size: 12px;
+            font-weight: normal;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            max-width: 280px;
+            white-space: normal;
+            text-align: center;
+            word-wrap: break-word;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .bracket-container {
+                padding: 15px;
+            }
+
+            .bracket {
+                min-width: 800px;
+            }
+
+            .match {
+                width: 140px;
+            }
+
+            .admin-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-navigation {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .tab-btn {
+                width: 200px;
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+
+            .champions-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .champions-title {
+                font-size: 1.6rem;
+            }
+
+            .leaderboard {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .leader-item {
+                padding: 15px;
+                gap: 12px;
+            }
+
+            .rank-number {
+                font-size: 1rem;
+                width: 30px;
+                height: 30px;
+                min-width: 30px;
+            }
+
+            .leader-name {
+                font-size: 14px;
+            }
+
+            .leader-count {
+                font-size: 12px;
+            }
+
+            .win-count {
+                font-size: 1.5rem;
+            }
+
+            .stats-title, .history-title {
+                font-size: 1.3rem;
+            }
+
+            #globalTooltip {
+                max-width: 90vw;
+                font-size: 11px;
+                padding: 6px 10px;
+                left: 5vw !important;
+                width: 90vw;
+                background: linear-gradient(135deg, #1e4d3b 0%, #0f2419 100%);
+                border: 1px solid #2d5a41;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>BKCS Croquet Tournament</h1>
+            <button class="admin-login-btn" onclick="adminLogin()">Admin Login</button>
+        </div>
+
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="showTab('bracket')">Current Bracket</button>
+            <button class="tab-btn" onclick="showTab('champions')">Past Champions</button>
+            <button class="tab-btn" onclick="showTab('betting')">Live Betting</button>
+        </div>
+
+        <div class="tab-content active" id="bracket-tab">
+            <div class="bracket-container">
+                <div class="bracket" id="bracket">
+                    <!-- Bracket will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="champions-tab">
+            <div class="champions-container">
+                <h2 class="champions-title">Roster of Distinguished Champions</h2>
+                
+                <div class="champions-stats">
+                    <h3 class="stats-title">Championship Leaderboard</h3>
+                    <div class="leaderboard" id="leaderboard">
+                        <!-- Leaderboard will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="champions-history">
+                    <h3 class="history-title">Complete Tournament History</h3>
+                    <div class="champions-grid" id="championsGrid">
+                        <!-- Champions will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Betting Tab -->
+        <div id="betting-tab" class="tab-content">
+            <div class="betting-container">
+                <div class="betting-header">
+                    <div class="betting-title">🏆 BKCS Croquet Tournament - Live Betting</div>
+                    <div class="betting-subtitle">All odds are for entertainment purposes only</div>
+                </div>
+
+                <div class="betting-nav">
+                    <button class="betting-nav-btn active" onclick="showBettingSection('matchups')">Match Betting</button>
+                    <button class="betting-nav-btn" onclick="showBettingSection('props')">Prop Bets</button>
+                    <button class="betting-nav-btn" onclick="showBettingSection('futures')">Tournament Winner</button>
+                </div>
+
+                <!-- Match Betting Section -->
+                <div id="matchups-betting" class="betting-section active">
+                    <h3>Match Betting</h3>
+                    <div id="matchup-odds" class="odds-grid"></div>
+                </div>
+
+                <!-- Prop Betting Section -->
+                <div id="props-betting" class="betting-section">
+                    <h3>Croquet Prop Bets</h3>
+                    <div id="prop-odds" class="props-grid"></div>
+                </div>
+
+                <!-- Futures Section -->
+                <div id="futures-betting" class="betting-section">
+                    <h3>Tournament Winner</h3>
+                    <div id="futures-odds" class="futures-grid"></div>
+                </div>
+
+                <div class="betting-disclaimer">
+                    <p><strong>Disclaimer:</strong> This is a simulation for entertainment purposes only. No real money betting is involved.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Global tooltip -->
+        <div id="globalTooltip" class="tooltip" style="opacity: 0; visibility: hidden;">Performance enhancing drug allegations pending from 1993 championship</div>
+
+        <div class="admin-panel" id="adminPanel">
+            <h2>Admin Panel - Match Management</h2>
+            <div id="adminControls">
+                <!-- Admin controls will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Round 1 matches - only first 6 matches (12 teams)
+        let matches = [
+            {
+                id: 1,
+                team1: "Kerry & Carrie",
+                team2: "Katie & Collin",
+                time: "8:00 AM, Saturday",
+                odds: "Even",
+                winner: "TBD"
+            },
+            {
+                id: 2,
+                team1: "Caroline & Nancy",
+                team2: "Jon C & Xue Di",
+                time: "8:40 AM, Saturday",
+                odds: "Even",
+                winner: "TBD"
+            },
+            {
+                id: 3,
+                team1: "Erin & Olivia B",
+                team2: "Christi & Carla",
+                time: "9:20 AM, Saturday",
+                odds: "Even",
+                winner: "TBD"
+            },
+            {
+                id: 4,
+                team1: "Todd & Kenzie",
+                team2: "Emma C & Allie J",
+                time: "10:00 AM, Saturday",
+                odds: "Even",
+                winner: "TBD"
+            },
+            {
+                id: 5,
+                team1: "Zack & Bob B",
+                team2: "Margaret & Jack",
+                time: "10:40 AM, Saturday",
+                odds: "Even",
+                winner: "TBD"
+            },
+            {
+                id: 6,
+                team1: "Ian & Nick R",
+                team2: "Reed & Cory",
+                time: "11:20 AM, Saturday",
+                odds: "Even",
+                winner: "TBD"
+            }
+        ];
+
+        // Teams that get byes to Round 2 (10 teams = 5 pairs)
+        const byeTeams = [
+            "Bob P & Aysia",
+            "Brooke & Paul", 
+            "Coco & Chris M",
+            "John R & Mark B",
+            "Sam & Billy",
+            "Morgan & Nick W",
+            "Chris C & Will",
+            "Steph & Alex",
+            "Allie W & AJ",
+            "Willow & Emma B"
+        ];
+
+        // Past Champions data
+        const pastChampions = [
+            { year: 1987, champions: "William Mulgrew" },
+            { year: 1988, champions: "John Rourke" },
+            { year: 1989, champions: "Robert Peterson" },
+            { year: 1990, champions: "Reed Netter" },
+            { year: 1991, champions: "Reed Netter" },
+            { year: 1992, champions: "Joel Miller" },
+            { year: 1993, champions: "Christopher Creedon" },
+            { year: 1994, champions: "Robert Burke" },
+            { year: 1995, champions: "Rosie Connors & Joel Miller" },
+            { year: 1996, champions: "Meghan Creedon & Tigger Yeaw" },
+            { year: 1997, champions: "Annie Connors & Joel Miller" },
+            { year: 1998, champions: "Rosie Connors & Paul Watson" },
+            { year: 1999, champions: "Laurie Martin & Christopher Creedon" },
+            { year: 2000, champions: "No Tournament" },
+            { year: 2001, champions: "Paul Watson & Nick Watson" },
+            { year: 2002, champions: "Duncan Creedon & Chris Martin" },
+            { year: 2003, champions: "Christi Odiaga & Joel Miller" },
+            { year: 2004, champions: "Kerry Peterson & Todd Martin" },
+            { year: 2005, champions: "Kerry Peterson & Chris Martin" },
+            { year: 2006, champions: "Christopher Creedon & Arthur Watson" },
+            { year: 2007, champions: "Emma Burke & Paul Watson" },
+            { year: 2008, champions: "Nick Creedon & Reed Netter" },
+            { year: 2009, champions: "Robert Burke & Mackenzie O'Connor" },
+            { year: 2010, champions: "Mike Ryan & Austen Peterson" },
+            { year: 2011, champions: "Zack Martin & Rob Sosa" },
+            { year: 2012, champions: "Zack Martin & Kerry Peterson" },
+            { year: 2013, champions: "Mark Beidleman & Chris Martin" },
+            { year: 2014, champions: "Sam Watson & Mackenzie O'Connor" },
+            { year: 2015, champions: "Paul Watson & Reed Netter" },
+            { year: 2016, champions: "Will Creedon & Austen Peterson" },
+            { year: 2017, champions: "Ian O'Connor & Olivia Burke" },
+            { year: 2018, champions: "Kerry Peterson & Nick Watson" },
+            { year: 2019, champions: "Cory Watson & Nancy Creedon" },
+            { year: 2020, champions: "No Tournament" },
+            { year: 2021, champions: "Kerry Peterson & Reed Netter" },
+            { year: 2022, champions: "Christopher Creedon & Nick Creedon" },
+            { year: 2023, champions: "Chris Martin & Robert Burke" },
+            { year: 2024, champions: "Sam Watson & Alex Kelly" }
+        ];
+
+        // All tournament rounds data
+        let allRounds = {
+            round1: matches, // 6 matches → 6 winners
+            round2: [
+                // 8 matches: 6 Round 1 winners + 10 bye teams = 16 teams
+                { id: 'R2-1', team1: 'TBD', team2: 'TBD', time: '12:00 PM, Saturday', odds: 'TBD', winner: 'TBD' },
+                { id: 'R2-2', team1: 'TBD', team2: 'TBD', time: '12:40 PM, Saturday', odds: 'TBD', winner: 'TBD' },
+                { id: 'R2-3', team1: 'TBD', team2: 'TBD', time: '1:20 PM, Saturday', odds: 'TBD', winner: 'TBD' },
+                { id: 'R2-4', team1: 'TBD', team2: 'TBD', time: '2:00 PM, Saturday', odds: 'TBD', winner: 'TBD' },
+                { id: 'R2-5', team1: 'TBD', team2: 'TBD', time: '2:40 PM, Saturday', odds: 'TBD', winner: 'TBD' },
+                { id: 'R2-6', team1: 'TBD', team2: 'TBD', time: '3:20 PM, Saturday', odds: 'TBD', winner: 'TBD' },
+                { id: 'R2-7', team1: 'TBD', team2: 'TBD', time: '4:00 PM, Saturday', odds: 'TBD', winner: 'TBD' },
+                { id: 'R2-8', team1: 'TBD', team2: 'TBD', time: '4:40 PM, Saturday', odds: 'TBD', winner: 'TBD' }
+            ],
+            round3: [
+                // Quarterfinals: 8 Round 2 winners → 4 matches → 4 winners
+                { id: 'QF1', team1: 'TBD', team2: 'TBD', time: '8:00 AM, Sunday', odds: 'TBD', winner: 'TBD' },
+                { id: 'QF2', team1: 'TBD', team2: 'TBD', time: '8:40 AM, Sunday', odds: 'TBD', winner: 'TBD' },
+                { id: 'QF3', team1: 'TBD', team2: 'TBD', time: '9:20 AM, Sunday', odds: 'TBD', winner: 'TBD' },
+                { id: 'QF4', team1: 'TBD', team2: 'TBD', time: '10:00 AM, Sunday', odds: 'TBD', winner: 'TBD' }
+            ],
+            round4: [
+                // Semifinals: 4 Round 3 winners → 2 matches → 2 winners
+                { id: 'SF1', team1: 'TBD', team2: 'TBD', time: '10:40 AM, Sunday', odds: 'TBD', winner: 'TBD' },
+                { id: 'SF2', team1: 'TBD', team2: 'TBD', time: '11:20 AM, Sunday', odds: 'TBD', winner: 'TBD' }
+            ],
+            final: [
+                { id: 'FINAL', team1: 'TBD', team2: 'TBD', time: '12:00 PM, Sunday', odds: 'TBD', winner: 'TBD' }
+            ]
+        };
+
+        let isAdmin = false;
+
+        function getWinner(matchId) {
+            const match = matches.find(m => m.id === matchId);
+            return match && match.winner !== 'TBD' ? match.winner : 'TBD';
+        }
+
+        function updateTeamsFromResults() {
+            // Update Round 2 teams: 6 Round 1 winners + 10 bye teams = 16 teams → 8 matches
+            
+            // R2-1: Match 1 winner vs Match 2 winner
+            allRounds.round2[0].team1 = getWinner(1);
+            allRounds.round2[0].team2 = getWinner(2);
+            
+            // R2-2: Match 3 winner vs Match 4 winner
+            allRounds.round2[1].team1 = getWinner(3);
+            allRounds.round2[1].team2 = getWinner(4);
+            
+            // R2-3: Match 5 winner vs Match 6 winner (as you mentioned)
+            allRounds.round2[2].team1 = getWinner(5);
+            allRounds.round2[2].team2 = getWinner(6);
+            
+            // R2-4: Bob P & Aysia vs Brooke & Paul (bye teams)
+            allRounds.round2[3].team1 = byeTeams[0]; // Bob P & Aysia
+            allRounds.round2[3].team2 = byeTeams[1]; // Brooke & Paul
+            
+            // R2-5: Coco & Chris M vs John R & Mark B (bye teams)
+            allRounds.round2[4].team1 = byeTeams[2]; // Coco & Chris M
+            allRounds.round2[4].team2 = byeTeams[3]; // John R & Mark B
+            
+            // R2-6: Sam & Billy vs Morgan & Nick W (bye teams)
+            allRounds.round2[5].team1 = byeTeams[4]; // Sam & Billy
+            allRounds.round2[5].team2 = byeTeams[5]; // Morgan & Nick W
+            
+            // R2-7: Chris C & Will vs Steph & Alex (bye teams)
+            allRounds.round2[6].team1 = byeTeams[6]; // Chris C & Will
+            allRounds.round2[6].team2 = byeTeams[7]; // Steph & Alex
+            
+            // R2-8: Allie W & AJ vs Willow & Emma B (bye teams)
+            allRounds.round2[7].team1 = byeTeams[8]; // Allie W & AJ
+            allRounds.round2[7].team2 = byeTeams[9]; // Willow & Emma B
+
+            // Update Round 3 teams based on Round 2 results (8 winners → 4 matches)
+            allRounds.round3[0].team1 = allRounds.round2[0].winner !== 'TBD' ? allRounds.round2[0].winner : 'R2-1 Winner';
+            allRounds.round3[0].team2 = allRounds.round2[1].winner !== 'TBD' ? allRounds.round2[1].winner : 'R2-2 Winner';
+            
+            allRounds.round3[1].team1 = allRounds.round2[2].winner !== 'TBD' ? allRounds.round2[2].winner : 'R2-3 Winner';
+            allRounds.round3[1].team2 = allRounds.round2[3].winner !== 'TBD' ? allRounds.round2[3].winner : 'R2-4 Winner';
+            
+            allRounds.round3[2].team1 = allRounds.round2[4].winner !== 'TBD' ? allRounds.round2[4].winner : 'R2-5 Winner';
+            allRounds.round3[2].team2 = allRounds.round2[5].winner !== 'TBD' ? allRounds.round2[5].winner : 'R2-6 Winner';
+            
+            allRounds.round3[3].team1 = allRounds.round2[6].winner !== 'TBD' ? allRounds.round2[6].winner : 'R2-7 Winner';
+            allRounds.round3[3].team2 = allRounds.round2[7].winner !== 'TBD' ? allRounds.round2[7].winner : 'R2-8 Winner';
+
+            // Update Round 4 teams based on Round 3 results (4 winners → 2 matches)
+            allRounds.round4[0].team1 = allRounds.round3[0].winner !== 'TBD' ? allRounds.round3[0].winner : 'QF1 Winner';
+            allRounds.round4[0].team2 = allRounds.round3[1].winner !== 'TBD' ? allRounds.round3[1].winner : 'QF2 Winner';
+            
+            allRounds.round4[1].team1 = allRounds.round3[2].winner !== 'TBD' ? allRounds.round3[2].winner : 'QF3 Winner';
+            allRounds.round4[1].team2 = allRounds.round3[3].winner !== 'TBD' ? allRounds.round3[3].winner : 'QF4 Winner';
+
+            // Update Final teams based on Round 4 results (2 winners → 1 match)
+            allRounds.final[0].team1 = allRounds.round4[0].winner !== 'TBD' ? allRounds.round4[0].winner : 'SF1 Winner';
+            allRounds.final[0].team2 = allRounds.round4[1].winner !== 'TBD' ? allRounds.round4[1].winner : 'SF2 Winner';
+        }
+
+        function renderBracket() {
+            updateTeamsFromResults();
+            
+            const bracket = document.getElementById('bracket');
+            bracket.innerHTML = '';
+
+            // Render Round 1
+            const round1 = document.createElement('div');
+            round1.className = 'round';
+            round1.innerHTML = '<div class="round-header">Round 1<br>First Round</div>';
+
+            allRounds.round1.forEach(match => {
+                const matchDiv = document.createElement('div');
+                matchDiv.className = 'match';
+                
+                matchDiv.innerHTML = `
+                    <div class="match-number">M${match.id}</div>
+                    <div class="team ${match.winner === match.team1 ? 'winner' : ''}">${match.team1}</div>
+                    <div class="team ${match.winner === match.team2 ? 'winner' : ''}">${match.team2}</div>
+                    <div class="match-info">
+                        <span>${match.time}</span>
+                        <a href="#" onclick="showLiveOdds('round1', ${match.id}); return false;" class="live-odds-link">Live Odds</a>
+                    </div>
+                    <div class="connector horizontal"></div>
+                `;
+                round1.appendChild(matchDiv);
+            });
+
+            // Render Round 2
+            const round2 = document.createElement('div');
+            round2.className = 'round';
+            round2.innerHTML = '<div class="round-header">Round 2<br>Second Round</div>';
+
+            allRounds.round2.forEach(match => {
+                const matchDiv = document.createElement('div');
+                matchDiv.className = 'match';
+                
+                matchDiv.innerHTML = `
+                    <div class="match-number">${match.id}</div>
+                    <div class="team ${match.winner === match.team1 ? 'winner' : ''}">${match.team1}</div>
+                    <div class="team ${match.winner === match.team2 ? 'winner' : ''}">${match.team2}</div>
+                    <div class="match-info">
+                        <span>${match.time}</span>
+                        <a href="#" onclick="showLiveOdds('round2', '${match.id}'); return false;" class="live-odds-link">Live Odds</a>
+                    </div>
+                    <div class="connector horizontal"></div>
+                `;
+                round2.appendChild(matchDiv);
+            });
+
+            // Render Round 3
+            const round3 = document.createElement('div');
+            round3.className = 'round';
+            round3.innerHTML = '<div class="round-header">Round 3<br>Quarterfinals</div>';
+
+            allRounds.round3.forEach(match => {
+                const matchDiv = document.createElement('div');
+                matchDiv.className = 'match';
+                
+                matchDiv.innerHTML = `
+                    <div class="match-number">${match.id}</div>
+                    <div class="team ${match.winner === match.team1 ? 'winner' : ''}">${match.team1}</div>
+                    <div class="team ${match.winner === match.team2 ? 'winner' : ''}">${match.team2}</div>
+                    <div class="match-info">
+                        <span>${match.time}</span>
+                        <a href="#" onclick="showLiveOdds('round3', '${match.id}'); return false;" class="live-odds-link">Live Odds</a>
+                    </div>
+                    <div class="connector horizontal"></div>
+                `;
+                round3.appendChild(matchDiv);
+            });
+
+            // Render Round 4
+            const round4 = document.createElement('div');
+            round4.className = 'round';
+            round4.innerHTML = '<div class="round-header">Round 4<br>Semifinals</div>';
+
+            allRounds.round4.forEach(match => {
+                const matchDiv = document.createElement('div');
+                matchDiv.className = 'match';
+                
+                matchDiv.innerHTML = `
+                    <div class="match-number">${match.id}</div>
+                    <div class="team ${match.winner === match.team1 ? 'winner' : ''}">${match.team1}</div>
+                    <div class="team ${match.winner === match.team2 ? 'winner' : ''}">${match.team2}</div>
+                    <div class="match-info">
+                        <span>${match.time}</span>
+                        <a href="#" onclick="showLiveOdds('round4', '${match.id}'); return false;" class="live-odds-link">Live Odds</a>
+                    </div>
+                    <div class="connector horizontal"></div>
+                `;
+                round4.appendChild(matchDiv);
+            });
+
+            // Render Championship
+            const championship = document.createElement('div');
+            championship.className = 'championship';
+            const finalMatch = allRounds.final[0];
+            championship.innerHTML = `
+                <div class="round-header">Championship</div>
+                <div class="match">
+                    <div class="match-number">${finalMatch.id}</div>
+                    <div class="team ${finalMatch.winner === finalMatch.team1 ? 'winner' : ''}">${finalMatch.team1}</div>
+                    <div class="team ${finalMatch.winner === finalMatch.team2 ? 'winner' : ''}">${finalMatch.team2}</div>
+                    <div class="match-info">
+                        <span>${finalMatch.time}</span>
+                        <a href="#" onclick="showLiveOdds('final', '${finalMatch.id}'); return false;" class="live-odds-link">Live Odds</a>
+                    </div>
+                </div>
+                <div style="margin-top: 30px;">
+                    <div class="champion-box">
+                        <div class="champion-title">CHAMPION</div>
+                        <div class="champion-name">${finalMatch.winner !== 'TBD' ? finalMatch.winner : 'TBD'}</div>
+                    </div>
+                </div>
+            `;
+
+            bracket.appendChild(round1);
+            bracket.appendChild(round2);
+            bracket.appendChild(round3);
+            bracket.appendChild(round4);
+            bracket.appendChild(championship);
+        }
+
+        function renderAdminControls() {
+            const adminControls = document.getElementById('adminControls');
+            adminControls.innerHTML = '';
+
+            // Render all rounds
+            Object.keys(allRounds).forEach(roundKey => {
+                const roundTitle = document.createElement('h2');
+                roundTitle.style.cssText = 'color: #1e4d3b; font-size: 1.2rem; margin-top: 30px; margin-bottom: 15px; text-align: center;';
+                
+                const roundNames = {
+                    round1: 'Round 1 - First Round (6 matches)',
+                    round2: 'Round 2 - Second Round (8 matches)', 
+                    round3: 'Round 3 - Quarterfinals (4 matches)',
+                    round4: 'Round 4 - Semifinals (2 matches)',
+                    final: 'Round 5 - Championship Final'
+                };
+                
+                roundTitle.textContent = roundNames[roundKey];
+                adminControls.appendChild(roundTitle);
+
+                allRounds[roundKey].forEach(match => {
+                    const adminMatch = document.createElement('div');
+                    adminMatch.className = 'admin-match';
+                    
+                    // Create winner options based on current teams
+                    let winnerOptions = `<option value="TBD" ${match.winner === 'TBD' ? 'selected' : ''}>TBD</option>`;
+                    if (match.team1 !== 'TBD' && !match.team1.includes('Winner')) {
+                        winnerOptions += `<option value="${match.team1}" ${match.winner === match.team1 ? 'selected' : ''}>${match.team1}</option>`;
+                    }
+                    if (match.team2 !== 'TBD' && !match.team2.includes('Winner') && !match.team2.includes('Bye')) {
+                        winnerOptions += `<option value="${match.team2}" ${match.winner === match.team2 ? 'selected' : ''}>${match.team2}</option>`;
+                    }
+                    
+                    adminMatch.innerHTML = `
+                        <h3>${match.id}: ${match.team1} vs ${match.team2}</h3>
+                        <div class="admin-time-display" style="text-align: center; margin: 10px 0; padding: 8px; background: #e8f0eb; border-radius: 6px; color: #2d5a41; font-weight: 600;">
+                            <strong>Scheduled Time:</strong> ${match.time}
+                        </div>
+                        <div class="admin-controls">
+                            <div class="control-group">
+                                <label>Odds</label>
+                                <input type="text" id="odds-${match.id}" value="${match.odds}" placeholder="e.g., Even, 2:1">
+                            </div>
+                            <div class="control-group">
+                                <label>Winner</label>
+                                <select id="winner-${match.id}">
+                                    ${winnerOptions}
+                                </select>
+                            </div>
+                        </div>
+                        <button class="save-btn" onclick="updateAnyMatch('${roundKey}', '${match.id}')">Save Changes</button>
+                    `;
+
+                    adminControls.appendChild(adminMatch);
+                });
+            });
+        }
+
+        function adminLogin() {
+            const password = prompt('Enter admin password:');
+            if (password === 'bkcs2025') {
+                isAdmin = true;
+                document.getElementById('adminPanel').style.display = 'block';
+                console.log('Rendering admin controls...');
+                renderAdminControls();
+                console.log('Admin controls rendered');
+                alert('Admin access granted!');
+            } else if (password !== null) {
+                alert('Incorrect password!');
+            }
+        }
+
+        function updateAnyMatch(roundKey, matchId) {
+            console.log('updateAnyMatch called with:', roundKey, matchId, typeof matchId);
+            console.log('allRounds structure:', allRounds);
+            console.log('Available matches in', roundKey, ':', allRounds[roundKey] ? allRounds[roundKey].map(m => ({id: m.id, type: typeof m.id})) : 'roundKey not found');
+            
+            // Check if the round exists
+            if (!allRounds[roundKey]) {
+                console.error('Round not found:', roundKey);
+                alert('Error: Round not found!');
+                return;
+            }
+            
+            // Convert matchId to number for Round 1, keep as string for others
+            let searchId = matchId;
+            if (roundKey === 'round1') {
+                searchId = parseInt(matchId);
+            }
+            
+            const match = allRounds[roundKey].find(m => m.id === searchId);
+            if (!match) {
+                console.error('Match not found:', roundKey, 'searchId:', searchId, 'originalId:', matchId);
+                console.error('Available match IDs:', allRounds[roundKey].map(m => m.id));
+                alert('Error: Match not found!');
+                return;
+            }
+
+            console.log('Match found:', match);
+
+            const oddsElement = document.getElementById(`odds-${matchId}`);
+            const winnerElement = document.getElementById(`winner-${matchId}`);
+            
+            console.log('Looking for elements with IDs:', {
+                oddsId: `odds-${matchId}`,
+                winnerId: `winner-${matchId}`
+            });
+
+            if (!oddsElement || !winnerElement) {
+                console.error('Elements not found:', {
+                    odds: oddsElement,
+                    winner: winnerElement
+                });
+                
+                // Debug: List all elements with similar IDs
+                const allElements = document.querySelectorAll('[id*="' + matchId + '"]');
+                console.log('Elements with matchId in their ID:', allElements);
+                console.log('All input elements:', document.querySelectorAll('input[id^="odds-"], select[id^="winner-"]'));
+                
+                alert('Error: Form elements not found! Check console for details.');
+                return;
+            }
+
+            const odds = oddsElement.value;
+            const winner = winnerElement.value;
+
+            console.log('Values:', { odds, winner });
+
+            // Time is now hardcoded, don't update it
+            match.odds = odds || 'Even';
+            match.winner = winner;
+
+            console.log('Updated match:', match);
+
+            // Re-render the bracket to show updates
+            renderBracket();
+            
+            // Re-render admin controls to update subsequent rounds
+            renderAdminControls();
+            
+            alert(`${matchId} updated successfully! Odds: ${match.odds}, Winner: ${match.winner}`);
+        }
+
+        // Keep the old function for backwards compatibility
+        function updateMatch(matchId) {
+            updateAnyMatch('round1', matchId);
+        }
+
+        function showTooltip(asterisk) {
+            const tooltip = document.getElementById('globalTooltip');
+            const rect = asterisk.getBoundingClientRect();
+            
+            // Calculate position
+            let left = rect.left + (rect.width / 2) - (140); // Center tooltip on asterisk
+            let top = rect.top - 60; // Show above asterisk
+            
+            // Keep within viewport bounds
+            const margin = 10;
+            if (left < margin) {
+                left = margin;
+            } else if (left + 280 > window.innerWidth - margin) {
+                left = window.innerWidth - 280 - margin;
+            }
+            
+            if (top < margin) {
+                // If not enough space above, show below
+                top = rect.bottom + 10;
+            }
+            
+            tooltip.style.left = left + 'px';
+            tooltip.style.top = top + 'px';
+            tooltip.style.opacity = '1';
+            tooltip.style.visibility = 'visible';
+        }
+
+        function hideTooltip() {
+            const tooltip = document.getElementById('globalTooltip');
+            tooltip.style.opacity = '0';
+            tooltip.style.visibility = 'hidden';
+        }
+
+        function toggleTooltip(asterisk) {
+            const tooltip = document.getElementById('globalTooltip');
+            if (tooltip.style.opacity === '1') {
+                hideTooltip();
+            } else {
+                showTooltip(asterisk);
+            }
+        }
+
+        // Hide tooltip when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.classList.contains('asterisk')) {
+                hideTooltip();
+            }
+        });
+
+        function calculateIndividualWins() {
+            const winCounts = {};
+            
+            pastChampions.forEach(championData => {
+                if (championData.champions !== 'No Tournament') {
+                    // Split by ' & ' to handle doubles partnerships
+                    const individuals = championData.champions.split(' & ');
+                    
+                    individuals.forEach(name => {
+                        name = name.trim();
+                        if (name) {
+                            winCounts[name] = (winCounts[name] || 0) + 1;
+                        }
+                    });
+                }
+            });
+            
+            // Convert to array and sort by wins (descending)
+            return Object.entries(winCounts)
+                .map(([name, wins]) => ({ name, wins }))
+                .sort((a, b) => b.wins - a.wins);
+        }
+
+        function renderLeaderboard() {
+            const leaderboard = document.getElementById('leaderboard');
+            leaderboard.innerHTML = '';
+
+            const individualWins = calculateIndividualWins();
+            const maxWins = individualWins[0]?.wins || 1;
+
+            individualWins.forEach((player, index) => {
+                const leaderItem = document.createElement('div');
+                leaderItem.className = 'leader-item';
+                
+                const rankNumber = index + 1;
+                const winPercentage = (player.wins / maxWins) * 100;
+                
+                // Add asterisk for Christopher Creedon
+                const asteriskHtml = player.name === 'Christopher Creedon' ? 
+                    `<span class="asterisk" onclick="toggleTooltip(this)" onmouseover="showTooltip(this)" onmouseout="hideTooltip(this)">*</span>` : '';
+                
+                leaderItem.innerHTML = `
+                    <div class="rank-number">${rankNumber}</div>
+                    <div class="leader-info">
+                        <div class="leader-name">${player.name}${asteriskHtml}</div>
+                        <div class="leader-count">${player.wins} championship${player.wins !== 1 ? 's' : ''}</div>
+                        <div class="win-bar">
+                            <div class="win-bar-fill" style="width: ${winPercentage}%"></div>
+                        </div>
+                    </div>
+                    <div class="win-count">${player.wins}</div>
+                `;
+                
+                leaderboard.appendChild(leaderItem);
+            });
+        }
+
+        function renderChampions() {
+            const championsGrid = document.getElementById('championsGrid');
+            championsGrid.innerHTML = '';
+
+            pastChampions.forEach(championData => {
+                const championDiv = document.createElement('div');
+                championDiv.className = 'champion-year';
+                
+                const isNoTournament = championData.champions === 'No Tournament';
+                
+                championDiv.innerHTML = `
+                    <div class="year-header">${championData.year}</div>
+                    <div class="champion-names ${isNoTournament ? 'no-tournament' : ''}">${championData.champions}</div>
+                `;
+                
+                championsGrid.appendChild(championDiv);
+            });
+        }
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked tab button
+            event.target.classList.add('active');
+            
+            // Render champions if champions tab is selected
+            if (tabName === 'champions') {
+                renderLeaderboard();
+                renderChampions();
+            }
+
+            // Render betting if betting tab is selected
+            if (tabName === 'betting') {
+                console.log('Rendering betting content...');
+                renderBettingContent();
+            }
+        }
+
+        // Betting Data and Functions
+        let bettingOdds = {};
+        let propBets = [];
+        let futuresOdds = [];
+
+        // Generate random but consistent odds for all matches
+        function generateBettingOdds() {
+            console.log('generateBettingOdds called. Current bettingOdds length:', Object.keys(bettingOdds).length);
+            if (Object.keys(bettingOdds).length > 0) {
+                console.log('Odds already generated, returning early');
+                return; // Already generated
+            }
+
+            console.log('Generating new betting odds...');
+            // Function to generate realistic odds
+            function generateRandomOdds() {
+                const favorites = [-120, -130, -140, -150, -110, -160, -170, -180];
+                const underdogs = [+110, +120, +130, +140, +150, +160, +170, +180, +190, +200, +210, +220];
+                
+                const favoriteOdds = favorites[Math.floor(Math.random() * favorites.length)];
+                const underdogOdds = underdogs[Math.floor(Math.random() * underdogs.length)];
+                
+                return Math.random() < 0.5 ? [favoriteOdds, underdogOdds] : [underdogOdds, favoriteOdds];
+            }
+
+            // Generate odds for all rounds
+            Object.keys(allRounds).forEach(roundKey => {
+                bettingOdds[roundKey] = {};
+                allRounds[roundKey].forEach(match => {
+                    const [odds1, odds2] = generateRandomOdds();
+                    bettingOdds[roundKey][match.id] = {
+                        team1Odds: odds1,
+                        team2Odds: odds2
+                    };
+                });
+            });
+
+            // Generate prop bets
+            propBets = [
+                {
+                    title: "Total Wickets Hit in Tournament",
+                    options: [
+                        { bet: "Over 120.5 Wickets", odds: "+140" },
+                        { bet: "Under 120.5 Wickets", odds: "-170" }
+                    ]
+                },
+                {
+                    title: "First Team to Complete Full Course (6 Wickets)",
+                    options: [
+                        { bet: "Kerry & Carrie", odds: "+180" },
+                        { bet: "Todd & Kenzie", odds: "+220" },
+                        { bet: "Caroline & Nancy", odds: "+250" },
+                        { bet: "Field (Any Other Team)", odds: "-140" }
+                    ]
+                },
+                {
+                    title: "Will Jack Creedon Measure Above 6'3\"?",
+                    options: [
+                        { bet: "Above 6'3\"", odds: "+320" },
+                        { bet: "Below 6'3\"", odds: "-450" }
+                    ]
+                },
+                {
+                    title: "Keg Delivery Time on Saturday",
+                    options: [
+                        { bet: "Before Noon", odds: "-180" },
+                        { bet: "After Noon", odds: "+150" }
+                    ]
+                },
+                {
+                    title: "Kellen's Top Speed",
+                    options: [
+                        { bet: "Over 9.5 mph", odds: "+280" },
+                        { bet: "Under 9.5 mph", odds: "-350" }
+                    ]
+                },
+                {
+                    title: "Grass Mow Length",
+                    options: [
+                        { bet: "Over 1.5 inches", odds: "+190" },
+                        { bet: "Under 1.5 inches", odds: "-240" }
+                    ]
+                },
+                {
+                    title: "Saturday Temperature High",
+                    options: [
+                        { bet: "Over 84.5°F", odds: "-120" },
+                        { bet: "Under 84.5°F", odds: "+100" }
+                    ]
+                },
+                {
+                    title: "Will It Rain Either Day?",
+                    options: [
+                        { bet: "Yes - Rain on Sat or Sun", odds: "+240" },
+                        { bet: "No - Dry Both Days", odds: "-310" }
+                    ]
+                },
+                {
+                    title: "Championship Match Mallet Breaks",
+                    options: [
+                        { bet: "At Least 1 Broken Mallet", odds: "+450" },
+                        { bet: "No Broken Mallets", odds: "-650" }
+                    ]
+                },
+                {
+                    title: "Most Creative Excuse for Bad Shot",
+                    options: [
+                        { bet: "Blame the Grass", odds: "-150" },
+                        { bet: "Blame the Wind", odds: "+180" },
+                        { bet: "Blame the Mallet", odds: "+220" },
+                        { bet: "Other Excuse", odds: "+300" }
+                    ]
+                }
+            ];
+
+            // Generate futures odds for all teams
+            const allTeams = [];
+            
+            // Add Round 1 teams
+            matches.forEach(match => {
+                if (match.team1 && match.team1 !== 'TBD') allTeams.push(match.team1);
+                if (match.team2 && match.team2 !== 'TBD') allTeams.push(match.team2);
+            });
+            
+            // Add bye teams
+            byeTeams.forEach(team => {
+                if (team && team !== 'TBD') allTeams.push(team);
+            });
+
+            // Generate realistic futures odds (favorites get lower odds)
+            const topContenders = ['Todd & Kenzie', 'Caroline & Nancy', 'Zack & Bob B', 'Willow & Emma B'];
+            const middleTier = ['Christi & Carla', 'Emma C & Allie J', 'Ian & Nick R', 'Chris C & Will', 'Coco & Chris M', 'Bob P & Aysia'];
+            
+            futuresOdds = allTeams.map(team => {
+                let odds;
+                if (topContenders.includes(team)) {
+                    odds = ['+250', '+300', '+350', '+400'][Math.floor(Math.random() * 4)];
+                } else if (middleTier.includes(team)) {
+                    odds = ['+450', '+500', '+600', '+700'][Math.floor(Math.random() * 4)];
+                } else {
+                    odds = ['+800', '+1000', '+1200', '+1500'][Math.floor(Math.random() * 4)];
+                }
+                return { team, odds };
+            });
+
+            // Sort by odds (favorites first)
+            futuresOdds.sort((a, b) => parseInt(a.odds.replace('+', '')) - parseInt(b.odds.replace('+', '')));
+        }
+
+        function showLiveOdds(roundKey, matchId) {
+            showTab('betting');
+            // Focus on the specific match (could add highlighting later)
+        }
+
+        function showBettingSection(section) {
+            // Hide all betting sections
+            document.querySelectorAll('.betting-section').forEach(s => s.classList.remove('active'));
+            
+            // Remove active class from nav buttons
+            document.querySelectorAll('.betting-nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(section + '-betting').classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        function renderBettingContent() {
+            console.log('renderBettingContent called');
+            generateBettingOdds();
+            console.log('Odds generated:', bettingOdds);
+            renderMatchOdds();
+            console.log('Match odds rendered');
+            renderPropBets();
+            console.log('Prop bets rendered');
+            renderFuturesOdds();
+            console.log('Futures odds rendered');
+        }
+
+        function renderMatchOdds() {
+            const container = document.getElementById('matchup-odds');
+            console.log('Match odds container:', container);
+            if (!container) {
+                console.error('Could not find matchup-odds container');
+                return;
+            }
+            container.innerHTML = '';
+
+            Object.keys(allRounds).forEach(roundKey => {
+                const roundMatches = allRounds[roundKey];
+                const roundTitle = {
+                    'round1': 'Round 1 - First Round',
+                    'round2': 'Round 2 - Second Round', 
+                    'round3': 'Round 3 - Quarterfinals',
+                    'round4': 'Round 4 - Semifinals',
+                    'final': 'Championship'
+                }[roundKey];
+
+                roundMatches.forEach(match => {
+                    if (match.team1 === 'TBD' && match.team2 === 'TBD') return;
+
+                    const odds = bettingOdds[roundKey][match.id];
+                    const matchCard = document.createElement('div');
+                    matchCard.className = 'match-card';
+                    
+                    matchCard.innerHTML = `
+                        <div class="match-header">${roundTitle} - ${match.id}</div>
+                        <div class="team-odds">
+                            <span class="team-name">${match.team1}</span>
+                            <span class="odds-value">${odds.team1Odds > 0 ? '+' : ''}${odds.team1Odds}</span>
+                        </div>
+                        <div class="team-odds">
+                            <span class="team-name">${match.team2}</span>
+                            <span class="odds-value">${odds.team2Odds > 0 ? '+' : ''}${odds.team2Odds}</span>
+                        </div>
+                    `;
+                    
+                    container.appendChild(matchCard);
+                });
+            });
+        }
+
+        function renderPropBets() {
+            const container = document.getElementById('prop-odds');
+            console.log('Prop bets container:', container);
+            if (!container) {
+                console.error('Could not find prop-odds container');
+                return;
+            }
+            container.innerHTML = '';
+
+            propBets.forEach(prop => {
+                const propCard = document.createElement('div');
+                propCard.className = 'prop-card';
+                
+                let optionsHTML = prop.options.map(option => 
+                    `<div class="prop-option">
+                        <span>${option.bet}</span>
+                        <span class="odds-value">${option.odds}</span>
+                    </div>`
+                ).join('');
+
+                propCard.innerHTML = `
+                    <div class="prop-title">${prop.title}</div>
+                    ${optionsHTML}
+                `;
+                
+                container.appendChild(propCard);
+            });
+        }
+
+        function renderFuturesOdds() {
+            const container = document.getElementById('futures-odds');
+            console.log('Futures container:', container);
+            if (!container) {
+                console.error('Could not find futures-odds container');
+                return;
+            }
+            container.innerHTML = '';
+
+            futuresOdds.forEach(future => {
+                const futureCard = document.createElement('div');
+                futureCard.className = 'futures-card';
+                
+                futureCard.innerHTML = `
+                    <span class="team-name">${future.team}</span>
+                    <span class="odds-value">${future.odds}</span>
+                `;
+                
+                container.appendChild(futureCard);
+            });
+        }
+
+        // Initialize the bracket
+        renderBracket();
+    </script>
+</body>
+</html>
