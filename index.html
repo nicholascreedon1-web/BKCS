@@ -256,6 +256,12 @@
             font-weight: 700;
             color: #1e4d3b;
             margin-bottom: 10px;
+            background: linear-gradient(135deg, #f7f5f0 0%, #ede8e0 100%);
+            padding: 20px 30px;
+            border-radius: 12px;
+            border: 3px solid #2d5a41;
+            box-shadow: 0 6px 20px rgba(45, 90, 65, 0.3);
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
         }
 
         .betting-subtitle {
@@ -446,19 +452,227 @@
             box-shadow: 0 6px 15px rgba(45, 90, 65, 0.15);
         }
 
-        .betting-disclaimer {
-            margin-top: 40px;
-            padding: 20px;
-            background: linear-gradient(135deg, #e8f0eb 0%, #dde8e1 100%);
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #c7d2cc;
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+            }
+
+            /* Better mobile tabs */
+            .tab-navigation {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .tab-btn {
+                padding: 12px 20px;
+                font-size: 16px;
+                min-height: 44px; /* iOS touch target */
+            }
+
+            /* Mobile bracket - stack vertically with horizontal scroll */
+            .bracket-container {
+                padding: 15px;
+                min-height: auto;
+            }
+
+            .bracket {
+                flex-direction: column;
+                gap: 30px;
+                min-width: auto;
+            }
+
+            .round {
+                min-height: auto;
+                gap: 15px;
+            }
+
+            .round-header {
+                font-size: 16px;
+                padding: 10px 15px;
+                margin-bottom: 15px;
+            }
+
+            .match {
+                width: 100%;
+                max-width: 300px;
+                margin: 10px auto;
+            }
+
+            .team {
+                padding: 10px 15px;
+                font-size: 14px;
+                min-height: 40px;
+            }
+
+            .match-info {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+
+            .live-odds-link {
+                padding: 4px 8px;
+                font-size: 10px;
+            }
+
+            /* Mobile betting */
+            .betting-container {
+                padding: 15px;
+            }
+
+            .betting-title {
+                font-size: 1.5rem;
+                padding: 15px 20px;
+                margin-bottom: 20px;
+            }
+
+            .betting-nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .betting-nav-btn {
+                padding: 15px 20px;
+                font-size: 16px;
+                min-height: 44px;
+            }
+
+            .odds-grid, .props-grid, .futures-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .match-card, .prop-card, .futures-card {
+                padding: 15px;
+            }
+
+            .team-odds, .prop-option {
+                padding: 12px 15px;
+                font-size: 16px;
+            }
+
+            .odds-value {
+                padding: 8px 12px;
+                font-size: 16px;
+                min-width: 60px;
+            }
+
+            /* Mobile admin */
+            .admin-login-btn {
+                padding: 12px 24px;
+                font-size: 16px;
+                min-height: 44px;
+            }
+
+            .admin-panel {
+                padding: 15px;
+                margin: 10px;
+            }
+
+            .admin-match {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+
+            .control-group {
+                margin-bottom: 15px;
+            }
+
+            .control-group input, .control-group select {
+                padding: 12px;
+                font-size: 16px;
+                min-height: 44px;
+            }
+
+            .save-btn {
+                padding: 12px 20px;
+                font-size: 16px;
+                min-height: 44px;
+                width: 100%;
+            }
+
+            /* Mobile champions */
+            .leaderboard {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .leader-item {
+                padding: 15px;
+            }
+
+            .rank-number {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+
+            .leader-name {
+                font-size: 16px;
+            }
+
+            .win-count {
+                font-size: 18px;
+                padding: 8px 12px;
+                min-width: 50px;
+            }
+
+            .champions-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .champion-year {
+                padding: 15px;
+            }
+
+            /* Hide connectors on mobile for cleaner look */
+            .connector {
+                display: none;
+            }
+
+            /* Better mobile typography */
+            body {
+                font-size: 16px;
+                line-height: 1.5;
+            }
+
+            /* Prevent horizontal scroll */
+            .bracket {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
         }
 
-        .betting-disclaimer p {
-            margin: 0;
-            color: #2d5a41;
-            font-weight: 500;
+        /* Extra small screens */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .betting-title {
+                font-size: 1.3rem;
+                padding: 12px 15px;
+            }
+
+            .match {
+                max-width: 280px;
+            }
+
+            .team {
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+
+            .match-number {
+                font-size: 9px;
+                padding: 2px 6px;
+            }
         }
 
         /* Connecting Lines */
@@ -976,7 +1190,6 @@
             <div class="betting-container">
                 <div class="betting-header">
                     <div class="betting-title">🏆 BKCS Croquet Tournament - Live Betting</div>
-                    <div class="betting-subtitle">All odds are for entertainment purposes only</div>
                 </div>
 
                 <div class="betting-nav">
@@ -1003,9 +1216,7 @@
                     <div id="futures-odds" class="futures-grid"></div>
                 </div>
 
-                <div class="betting-disclaimer">
-                    <p><strong>Disclaimer:</strong> This is a simulation for entertainment purposes only. No real money betting is involved.</p>
-                </div>
+
             </div>
         </div>
 
@@ -1065,7 +1276,7 @@
             },
             {
                 id: 6,
-                team1: "Ian & Nick R",
+                team1: "Ian & Mike R",
                 team2: "Reed & Cory",
                 time: "11:20 AM, Saturday",
                 odds: "Even",
@@ -1785,7 +1996,7 @@
 
             // Generate realistic futures odds (favorites get lower odds)
             const topContenders = ['Todd & Kenzie', 'Caroline & Nancy', 'Zack & Bob B', 'Willow & Emma B'];
-            const middleTier = ['Christi & Carla', 'Emma C & Allie J', 'Ian & Nick R', 'Chris C & Will', 'Coco & Chris M', 'Bob P & Aysia'];
+            const middleTier = ['Christi & Carla', 'Emma C & Allie J', 'Ian & Mike R', 'Chris C & Will', 'Coco & Chris M', 'Bob P & Aysia'];
             
             futuresOdds = allTeams.map(team => {
                 let odds;
