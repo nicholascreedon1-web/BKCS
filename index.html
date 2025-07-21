@@ -1052,6 +1052,9 @@
 
         .champion-tier {
             margin-bottom: 40px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .tier-header {
@@ -1061,7 +1064,10 @@
             background: linear-gradient(135deg, #2d5a41 0%, #1e4d3b 100%);
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(45, 90, 65, 0.3);
+            position: relative;
         }
+
+
 
         .tier-title {
             font-size: 1.4rem;
@@ -1081,6 +1087,8 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
+            justify-content: center;
+            justify-items: center;
         }
 
         .champion-card {
@@ -1092,6 +1100,9 @@
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
+            min-width: 180px;
+            max-width: 220px;
+            width: 100%;
         }
 
         .champion-card:hover {
@@ -1296,6 +1307,7 @@
             .tier-grid {
                 grid-template-columns: 1fr;
                 gap: 12px;
+                justify-items: center;
             }
 
             .champion-card {
@@ -1988,7 +2000,7 @@
                 championTiers[player.wins].push(player);
             });
 
-            // Sort tiers by win count (descending)
+            // Sort tiers by win count (descending - 5 championships first, then 4, then 3, etc.)
             const sortedTiers = Object.keys(championTiers)
                 .map(wins => parseInt(wins))
                 .sort((a, b) => b - a);
@@ -2027,7 +2039,7 @@
                     tierSection.className = 'champion-tier';
                     
                     const tierHeader = document.createElement('div');
-                    tierHeader.className = 'tier-header';
+                    tierHeader.className = `tier-header tier-${winCount}`;
                     tierHeader.innerHTML = `
                         <div class="tier-title">${winCount} Championships</div>
                         <div class="tier-count">${playersInTier.length} Champion${playersInTier.length !== 1 ? 's' : ''}</div>
