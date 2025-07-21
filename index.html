@@ -444,12 +444,130 @@
             align-items: center;
             transition: all 0.3s;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
         .futures-card:hover {
             border-color: #2d5a41;
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(45, 90, 65, 0.15);
+        }
+
+        .futures-card.trending-up {
+            border-color: #16a34a;
+            background: linear-gradient(135deg, #f0fdf4 0%, #e7f5e7 100%);
+        }
+
+        .futures-card.trending-down {
+            border-color: #dc2626;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        }
+
+        .futures-card.hot {
+            border-color: #ea580c;
+            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(234, 88, 12, 0.3); }
+            50% { box-shadow: 0 0 15px rgba(234, 88, 12, 0.6); }
+        }
+
+        .team-info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .team-name-with-rank {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rank-change {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .rank-change.up {
+            background: #16a34a;
+            color: white;
+        }
+
+        .rank-change.down {
+            background: #dc2626;
+            color: white;
+        }
+
+        .rank-change.hot {
+            background: #ea580c;
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .odds-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .odds-change {
+            font-size: 10px;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        .odds-change.positive {
+            color: #16a34a;
+        }
+
+        .odds-change.negative {
+            color: #dc2626;
+        }
+
+        .live-indicator {
+            background: #ef4444;
+            color: white;
+            font-size: 8px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: blink 2s infinite;
+            margin-bottom: 4px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        .trend-arrow {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .trend-arrow.up {
+            color: #16a34a;
+        }
+
+        .trend-arrow.down {
+            color: #dc2626;
         }
 
         /* Mobile Optimizations */
@@ -1202,7 +1320,15 @@
 
                 <!-- Futures Section -->
                 <div id="futures-betting" class="betting-section">
-                    <h3>Tournament Winner</h3>
+                    <h3>Tournament Winner - Live Odds</h3>
+                    <div style="text-align: center; margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, #e8f0eb 0%, #dde8e1 100%); border-radius: 10px; border: 2px solid #2d5a41;">
+                        <div style="font-size: 14px; color: #1e4d3b; font-weight: 600; margin-bottom: 5px;">
+                            🔴 LIVE BETTING • Odds Moving Based on Action
+                        </div>
+                        <div style="font-size: 12px; color: #5d4e37;">
+                            ↗ Trending Up • ↘ Trending Down • 🔥 Heavy Action
+                        </div>
+                    </div>
                     <div id="futures-odds" class="futures-grid"></div>
                 </div>
 
@@ -1984,24 +2110,73 @@
                 if (team && team !== 'TBD') allTeams.push(team);
             });
 
-            // Generate realistic futures odds (favorites get lower odds)
+            // Generate realistic futures odds with dynamic trends
             const topContenders = ['Todd & Kenzie', 'Caroline & Nancy', 'Zack & Bob B', 'Willow & Emma B'];
             const middleTier = ['Christi & Carla', 'Emma C & Allie J', 'Ian & Mike R', 'Chris C & Will', 'Coco & Chris M', 'Bob P & Aysia'];
             
-            futuresOdds = allTeams.map(team => {
-                let odds;
+            // Predefined trending teams for realistic movement
+            const trendingUp = ['Kerry & Carrie', 'Steph & Alex', 'Chris C & Will'];
+            const trendingDown = ['Margaret & Jack', 'Reed & Cory', 'John R & Mark B'];
+            const hotTeams = ['Todd & Kenzie', 'Willow & Emma B']; // Teams getting heavy action
+            
+            futuresOdds = allTeams.map((team, index) => {
+                let odds, previousOdds, movement, trend = '';
+                
                 if (topContenders.includes(team)) {
                     odds = ['+250', '+300', '+350', '+400'][Math.floor(Math.random() * 4)];
+                    previousOdds = ['+280', '+320', '+380', '+420'][Math.floor(Math.random() * 4)];
                 } else if (middleTier.includes(team)) {
                     odds = ['+450', '+500', '+600', '+700'][Math.floor(Math.random() * 4)];
+                    previousOdds = ['+480', '+530', '+630', '+730'][Math.floor(Math.random() * 4)];
                 } else {
                     odds = ['+800', '+1000', '+1200', '+1500'][Math.floor(Math.random() * 4)];
+                    previousOdds = ['+850', '+1050', '+1250', '+1550'][Math.floor(Math.random() * 4)];
                 }
-                return { team, odds };
+
+                // Determine trend and movement
+                const currentValue = parseInt(odds.replace('+', ''));
+                const previousValue = parseInt(previousOdds.replace('+', ''));
+                
+                if (trendingUp.includes(team)) {
+                    trend = 'up';
+                    movement = previousValue - currentValue; // Positive movement (odds getting better)
+                } else if (trendingDown.includes(team)) {
+                    trend = 'down';
+                    movement = currentValue - previousValue; // Negative movement (odds getting worse)
+                } else if (hotTeams.includes(team)) {
+                    trend = 'hot';
+                    movement = Math.floor(Math.random() * 50) + 10; // Random hot movement
+                } else {
+                    // Random small movements for other teams
+                    const randomMovement = Math.floor(Math.random() * 60) - 30; // -30 to +30
+                    if (randomMovement > 10) {
+                        trend = 'up';
+                        movement = randomMovement;
+                    } else if (randomMovement < -10) {
+                        trend = 'down';
+                        movement = Math.abs(randomMovement);
+                    } else {
+                        trend = 'stable';
+                        movement = 0;
+                    }
+                }
+
+                return { 
+                    team, 
+                    odds, 
+                    previousOdds,
+                    trend, 
+                    movement,
+                    isLive: Math.random() > 0.7, // 30% chance of being "live"
+                    rank: index + 1
+                };
             });
 
-            // Sort by odds (favorites first)
+            // Sort by odds (favorites first) and update ranks
             futuresOdds.sort((a, b) => parseInt(a.odds.replace('+', '')) - parseInt(b.odds.replace('+', '')));
+            futuresOdds.forEach((team, index) => {
+                team.rank = index + 1;
+            });
         }
 
         function showLiveOdds(roundKey, matchId) {
@@ -2116,17 +2291,95 @@
             }
             container.innerHTML = '';
 
-            futuresOdds.forEach(future => {
+            // Add live indicator header
+            const liveHeader = document.createElement('div');
+            liveHeader.style.cssText = 'text-align: center; margin-bottom: 20px; padding: 10px; background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border-radius: 8px; border: 1px solid #ef4444;';
+            liveHeader.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <div class="live-indicator" style="margin: 0;">LIVE</div>
+                    <span style="font-weight: 600; color: #1e4d3b;">Tournament Winner Odds - Updating Live</span>
+                </div>
+                <div style="font-size: 12px; color: #5d4e37; margin-top: 4px;">
+                    Last updated: ${new Date().toLocaleTimeString()}
+                </div>
+            `;
+            container.appendChild(liveHeader);
+
+            futuresOdds.forEach((future, index) => {
                 const futureCard = document.createElement('div');
-                futureCard.className = 'futures-card';
+                let cardClasses = 'futures-card';
+                
+                // Add trend classes
+                if (future.trend === 'up') cardClasses += ' trending-up';
+                else if (future.trend === 'down') cardClasses += ' trending-down';
+                else if (future.trend === 'hot') cardClasses += ' hot';
+                
+                futureCard.className = cardClasses;
+                
+                // Generate trend indicators
+                let trendIndicator = '';
+                if (future.trend === 'up') {
+                    trendIndicator = `<div class="rank-change up"><span class="trend-arrow up">↗</span> +${future.movement}</div>`;
+                } else if (future.trend === 'down') {
+                    trendIndicator = `<div class="rank-change down"><span class="trend-arrow down">↘</span> +${future.movement}</div>`;
+                } else if (future.trend === 'hot') {
+                    trendIndicator = `<div class="rank-change hot">🔥 HOT</div>`;
+                }
+
+                // Generate odds change indicator
+                let oddsChange = '';
+                if (future.movement > 0 && future.trend !== 'hot') {
+                    const changeText = future.trend === 'up' ? `was ${future.previousOdds}` : `was ${future.previousOdds}`;
+                    const changeClass = future.trend === 'up' ? 'positive' : 'negative';
+                    oddsChange = `<div class="odds-change ${changeClass}">${changeText}</div>`;
+                }
+
+                // Live indicator for some teams
+                const liveIndicator = future.isLive ? '<div class="live-indicator">LIVE</div>' : '';
                 
                 futureCard.innerHTML = `
-                    <span class="team-name">${future.team}</span>
-                    <span class="odds-value">${future.odds}</span>
+                    <div class="team-info">
+                        <div class="team-name-with-rank">
+                            <span style="font-size: 10px; color: #666; margin-right: 4px;">#${future.rank}</span>
+                            <span class="team-name">${future.team}</span>
+                            ${trendIndicator}
+                        </div>
+                    </div>
+                    <div class="odds-info">
+                        ${liveIndicator}
+                        <span class="odds-value">${future.odds}</span>
+                        ${oddsChange}
+                    </div>
                 `;
                 
                 container.appendChild(futureCard);
             });
+
+            // Add update timer that refreshes every 30 seconds
+            setTimeout(() => {
+                if (document.getElementById('futures-betting').classList.contains('active')) {
+                    updateOddsMovement();
+                }
+            }, 30000);
+        }
+
+        // Function to simulate live odds updates
+        function updateOddsMovement() {
+            // Randomly update a few teams' trends
+            futuresOdds.forEach(future => {
+                // 20% chance of movement change
+                if (Math.random() > 0.8) {
+                    const movements = ['up', 'down', 'stable'];
+                    future.trend = movements[Math.floor(Math.random() * movements.length)];
+                    future.movement = Math.floor(Math.random() * 40) + 5;
+                    future.isLive = Math.random() > 0.6;
+                }
+            });
+            
+            // Re-render if still on futures tab
+            if (document.getElementById('futures-betting').classList.contains('active')) {
+                renderFuturesOdds();
+            }
         }
 
         // Initialize the bracket
