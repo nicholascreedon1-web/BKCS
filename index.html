@@ -475,21 +475,15 @@
                 min-height: 44px; /* iOS touch target */
             }
 
-            /* Mobile bracket - stack vertically with horizontal scroll */
+            /* Mobile bracket - keep horizontal layout but make scrollable */
             .bracket-container {
                 padding: 15px;
-                min-height: auto;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
 
             .bracket {
-                flex-direction: column;
-                gap: 30px;
-                min-width: auto;
-            }
-
-            .round {
-                min-height: auto;
-                gap: 15px;
+                min-width: 1000px; /* Maintain horizontal layout */
             }
 
             .round-header {
@@ -642,11 +636,7 @@
                 line-height: 1.5;
             }
 
-            /* Prevent horizontal scroll */
-            .bracket {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
+            /* Mobile bracket scrolling handled by container */
         }
 
         /* Extra small screens */
