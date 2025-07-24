@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BKCS Croquet Tournament Bracket</title>
+    <title>Benjamin-Kendrick Croquet Society - Championship Tournament</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1e4d3b 0%, #0f2419 100%);
+            background: linear-gradient(135deg, #4a7c59 0%, #3a6b49 100%);
             min-height: 100vh;
             color: #333;
             line-height: 1.6;
@@ -27,6 +27,8 @@
             padding: 20px;
         }
 
+
+
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -34,39 +36,84 @@
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            border: 2px solid #2d5a41;
+            border: 3px solid #f4d03f;
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0;
+        }
+
+        .title-section {
+            text-align: center;
+            flex: 1;
         }
 
         .header h1 {
             font-size: 2.2rem;
             font-weight: 700;
-            color: #1e4d3b;
-            margin-bottom: 8px;
+            background: linear-gradient(135deg, #4a7c59 0%, #2d5a41 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            line-height: 1.1;
         }
 
-        .header p {
+        .header .subtitle {
             font-size: 1rem;
-            color: #2d5a41;
-            margin-bottom: 15px;
+            color: #f4d03f;
+            margin-bottom: 0;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
         }
 
         .admin-login-btn {
-            background: #2d5a41;
-            color: #f7f5f0;
-            border: 2px solid #1e4d3b;
-            padding: 10px 20px;
+            background: #f4d03f;
+            color: #4a7c59;
+            border: 2px solid #e6c034;
+            padding: 8px 16px;
             border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .admin-login-btn:hover {
-            background: #1e4d3b;
-            border-color: #2d5a41;
+            background: #e6c034;
+            border-color: #f4d03f;
             transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(244, 208, 63, 0.3);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .admin-controls {
+                position: static;
+                text-align: center;
+                margin-top: 10px;
+            }
         }
 
         .bracket-container {
@@ -74,7 +121,7 @@
             border-radius: 15px;
             padding: 30px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            border: 2px solid #2d5a41;
+            border: 3px solid #f4d03f;
             margin-bottom: 20px;
             overflow-x: auto;
             min-height: 700px;
@@ -944,8 +991,8 @@
 
         .tab-btn {
             background: rgba(247, 245, 240, 0.9);
-            border: 2px solid #2d5a41;
-            color: #2d5a41;
+            border: 2px solid #f4d03f;
+            color: #4a7c59;
             padding: 12px 24px;
             border-radius: 8px;
             font-size: 14px;
@@ -955,14 +1002,16 @@
         }
 
         .tab-btn:hover {
-            background: rgba(45, 90, 65, 0.1);
-            border-color: #1e4d3b;
+            background: rgba(244, 208, 63, 0.2);
+            border-color: #e6c034;
+            transform: translateY(-1px);
         }
 
         .tab-btn.active {
-            background: #2d5a41;
-            color: #f7f5f0;
-            border-color: #1e4d3b;
+            background: #4a7c59;
+            color: #f4d03f;
+            border-color: #4a7c59;
+            box-shadow: 0 4px 12px rgba(74, 124, 89, 0.3);
         }
 
         .tab-content {
@@ -1340,9 +1389,19 @@
 </head>
 <body>
     <div class="container">
+
+
+
         <div class="header">
-            <h1>BKCS Croquet Tournament</h1>
-            <button class="admin-login-btn" onclick="adminLogin()">Admin Login</button>
+            <div class="header-content">
+                <div class="title-section">
+                     <h1>Benjamin-Kendrick Croquet Society</h1>
+                     <p class="subtitle">Championship Tournament Bracket</p>
+                </div>
+            </div>
+            <div class="admin-controls">
+                <button class="admin-login-btn" onclick="adminLogin()">Admin Login</button>
+            </div>
         </div>
 
         <div class="tab-navigation">
