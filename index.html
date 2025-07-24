@@ -79,24 +79,25 @@
         }
 
         .admin-login-btn {
-            background: #d4af37;
-            color: #2d4a3a;
-            border: 2px solid #b8941f;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 700;
+            background: rgba(247, 245, 240, 0.8);
+            color: #4a7c59;
+            border: 1px solid rgba(74, 124, 89, 0.3);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            text-transform: none;
+            letter-spacing: 0px;
+            opacity: 0.7;
         }
 
         .admin-login-btn:hover {
-            background: #b8941f;
-            border-color: #d4af37;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+            background: rgba(212, 175, 55, 0.2);
+            border-color: rgba(212, 175, 55, 0.5);
+            opacity: 1;
+            transform: none;
         }
 
         /* Responsive design */
@@ -1509,7 +1510,7 @@
                 id: 2,
                 team1: "Caroline & Nancy",
                 team2: "Jon C & Xue Di",
-                time: "8:40 AM, Saturday",
+                time: "8:45 AM, Saturday",
                 odds: "Even",
                 winner: "TBD"
             },
@@ -1517,7 +1518,7 @@
                 id: 3,
                 team1: "Erin & Olivia B",
                 team2: "Christi & Carla",
-                time: "9:20 AM, Saturday",
+                time: "9:30 AM, Saturday",
                 odds: "Even",
                 winner: "TBD"
             },
@@ -1525,15 +1526,15 @@
                 id: 4,
                 team1: "Todd & Kenzie",
                 team2: "Emma C & Allie J",
-                time: "10:00 AM, Saturday",
+                time: "10:15 AM, Saturday",
                 odds: "Even",
                 winner: "TBD"
             },
             {
                 id: 5,
-                team1: "Zack & Bob B",
+                team1: "Coco & Chris M",
                 team2: "Margaret & Jack",
-                time: "10:40 AM, Saturday",
+                time: "11:00 AM, Saturday",
                 odds: "Even",
                 winner: "TBD"
             },
@@ -1541,7 +1542,7 @@
                 id: 6,
                 team1: "Ian & Mike R",
                 team2: "Reed & Cory",
-                time: "11:20 AM, Saturday",
+                time: "11:45 AM, Saturday",
                 odds: "Even",
                 winner: "TBD"
             }
@@ -1549,9 +1550,9 @@
 
         // Teams that get byes to Round 2 (10 teams = 5 pairs)
         const byeTeams = [
-            "Bob P & Aysia",
+            "Zack & Bob B",
             "Brooke & Paul", 
-            "Coco & Chris M",
+            "Bob P & Aysia",
             "John R & Mark B",
             "Sam & Billy",
             "Morgan & Nick W",
@@ -1608,29 +1609,29 @@
             round1: matches, // 6 matches → 6 winners
             round2: [
                 // 8 matches: 6 Round 1 winners + 10 bye teams = 16 teams
-                { id: 'R2-1', team1: 'TBD', team2: 'TBD', time: '12:00 PM, Saturday', odds: 'TBD', winner: 'TBD' },
-                { id: 'R2-2', team1: 'TBD', team2: 'TBD', time: '12:40 PM, Saturday', odds: 'TBD', winner: 'TBD' },
-                { id: 'R2-3', team1: 'TBD', team2: 'TBD', time: '1:20 PM, Saturday', odds: 'TBD', winner: 'TBD' },
-                { id: 'R2-4', team1: 'TBD', team2: 'TBD', time: '2:00 PM, Saturday', odds: 'TBD', winner: 'TBD' },
-                { id: 'R2-5', team1: 'TBD', team2: 'TBD', time: '2:40 PM, Saturday', odds: 'TBD', winner: 'TBD' },
-                { id: 'R2-6', team1: 'TBD', team2: 'TBD', time: '3:20 PM, Saturday', odds: 'TBD', winner: 'TBD' },
-                { id: 'R2-7', team1: 'TBD', team2: 'TBD', time: '4:00 PM, Saturday', odds: 'TBD', winner: 'TBD' },
-                { id: 'R2-8', team1: 'TBD', team2: 'TBD', time: '4:40 PM, Saturday', odds: 'TBD', winner: 'TBD' }
+                { id: 'R2-1', team1: 'TBD', team2: 'TBD', time: '12:30 PM, Saturday', odds: 'TBD', winner: 'TBD' },
+                { id: 'R2-2', team1: 'TBD', team2: 'TBD', time: '1:15 PM, Saturday', odds: 'TBD', winner: 'TBD' },
+                { id: 'R2-3', team1: 'TBD', team2: 'TBD', time: '2:00 PM, Saturday', odds: 'TBD', winner: 'TBD' },
+                { id: 'R2-4', team1: 'TBD', team2: 'TBD', time: '2:45 PM, Saturday', odds: 'TBD', winner: 'TBD' },
+                { id: 'R2-5', team1: 'TBD', team2: 'TBD', time: '3:30 PM, Saturday', odds: 'TBD', winner: 'TBD' },
+                { id: 'R2-6', team1: 'TBD', team2: 'TBD', time: '4:15 PM, Saturday', odds: 'TBD', winner: 'TBD' },
+                { id: 'R2-7', team1: 'TBD', team2: 'TBD', time: '5:00 PM, Saturday', odds: 'TBD', winner: 'TBD' },
+                { id: 'R2-8', team1: 'TBD', team2: 'TBD', time: '5:45 PM, Saturday', odds: 'TBD', winner: 'TBD' }
             ],
             round3: [
                 // Quarterfinals: 8 Round 2 winners → 4 matches → 4 winners
                 { id: 'QF1', team1: 'TBD', team2: 'TBD', time: '8:00 AM, Sunday', odds: 'TBD', winner: 'TBD' },
-                { id: 'QF2', team1: 'TBD', team2: 'TBD', time: '8:40 AM, Sunday', odds: 'TBD', winner: 'TBD' },
-                { id: 'QF3', team1: 'TBD', team2: 'TBD', time: '9:20 AM, Sunday', odds: 'TBD', winner: 'TBD' },
-                { id: 'QF4', team1: 'TBD', team2: 'TBD', time: '10:00 AM, Sunday', odds: 'TBD', winner: 'TBD' }
+                { id: 'QF2', team1: 'TBD', team2: 'TBD', time: '8:45 AM, Sunday', odds: 'TBD', winner: 'TBD' },
+                { id: 'QF3', team1: 'TBD', team2: 'TBD', time: '9:30 AM, Sunday', odds: 'TBD', winner: 'TBD' },
+                { id: 'QF4', team1: 'TBD', team2: 'TBD', time: '10:15 AM, Sunday', odds: 'TBD', winner: 'TBD' }
             ],
             round4: [
                 // Semifinals: 4 Round 3 winners → 2 matches → 2 winners
-                { id: 'SF1', team1: 'TBD', team2: 'TBD', time: '10:40 AM, Sunday', odds: 'TBD', winner: 'TBD' },
-                { id: 'SF2', team1: 'TBD', team2: 'TBD', time: '11:20 AM, Sunday', odds: 'TBD', winner: 'TBD' }
+                { id: 'SF1', team1: 'TBD', team2: 'TBD', time: '11:00 AM, Sunday', odds: 'TBD', winner: 'TBD' },
+                { id: 'SF2', team1: 'TBD', team2: 'TBD', time: '11:45 AM, Sunday', odds: 'TBD', winner: 'TBD' }
             ],
             final: [
-                { id: 'FINAL', team1: 'TBD', team2: 'TBD', time: '12:00 PM, Sunday', odds: 'TBD', winner: 'TBD' }
+                { id: 'FINAL', team1: 'TBD', team2: 'TBD', time: '12:30 PM, Sunday', odds: 'TBD', winner: 'TBD' }
             ]
         };
 
@@ -1656,12 +1657,12 @@
             allRounds.round2[2].team1 = getWinner(5);
             allRounds.round2[2].team2 = getWinner(6);
             
-            // R2-4: Bob P & Aysia vs Brooke & Paul (bye teams)
-            allRounds.round2[3].team1 = byeTeams[0]; // Bob P & Aysia
+            // R2-4: Zack & Bob B vs Brooke & Paul (bye teams)
+            allRounds.round2[3].team1 = byeTeams[0]; // Zack & Bob B
             allRounds.round2[3].team2 = byeTeams[1]; // Brooke & Paul
             
-            // R2-5: Coco & Chris M vs John R & Mark B (bye teams)
-            allRounds.round2[4].team1 = byeTeams[2]; // Coco & Chris M
+            // R2-5: Bob P & Aysia vs John R & Mark B (bye teams)
+            allRounds.round2[4].team1 = byeTeams[2]; // Bob P & Aysia
             allRounds.round2[4].team2 = byeTeams[3]; // John R & Mark B
             
             // R2-6: Sam & Billy vs Morgan & Nick W (bye teams)
